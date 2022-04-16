@@ -60,6 +60,15 @@
 
 const $ = (selector) => document.querySelector(selector); // $ 표시는 자바스크립트에서 dom의 element를 가져올 때 관용적으로 많이 쓰인다.
 
+const store = {
+  setLocalStorage(menu) {
+    localStorage.setItem('menu', JSON.stringify(menu));
+  },
+  getLocalStorage() {
+    localStorage.getItem('menu');
+  },
+};
+
 function App() {
   // *********** 재사용 함수
   const addMenuName = () => {
