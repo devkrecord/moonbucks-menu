@@ -70,6 +70,9 @@ const store = {
 };
 
 function App() {
+  // 상태는 변하는 데이터, 이 앱에서 변하는 것이 무엇인가 - 메뉴명
+  this.menu = [];
+
   // *********** 재사용 함수
   const addMenuName = () => {
     if ($('#espresso-menu-name').value === '') {
@@ -77,23 +80,28 @@ function App() {
       return;
     }
     const espressoMenuName = $('#espresso-menu-name').value;
-    const menuItemTemplate = (espressoMenuName) => {
-      return `<li class="menu-list-item d-flex items-center py-2">
-                  <span class="w-100 pl-2 menu-name">${espressoMenuName}</span>
-                  <button
-                    type="button"
-                    class="bg-gray-50 text-gray-500 text-sm mr-1 menu-edit-button"
-                  >
-                    수정
-                  </button>
-                  <button
-                    type="button"
-                    class="bg-gray-50 text-gray-500 text-sm menu-remove-button"
-                  >
-                    삭제
-                  </button>
-                </li>`;
-    };
+    this.menu.push({ name: espressoMenuName });
+    store.setLocalStorage(this.menu);
+    const template = this.menu
+      .map((item) => {
+        return `<li class="menu-list-item d-flex items-center py-2">
+      <span class="w-100 pl-2 menu-name">${item.name}</span>
+      <button
+        type="button"
+        class="bg-gray-50 text-gray-500 text-sm mr-1 menu-edit-button"
+      >
+        수정
+      </button>
+      <button
+        type="button"
+        class="bg-gray-50 text-gray-500 text-sm menu-remove-button"
+      >
+        삭제
+      </button>
+    </li>`;
+      })
+      .join('');
+
     // innerHTML은 덮어씌어진다.  아메리카노, 카파라떼 입력 시 -> 아메리카노, 카페라떼 (x) -> 카페라떼 (o)
     //   $('#espresso-menu-list').innerHTML = menuItemTemplate(espressoMenuName);
 
@@ -104,10 +112,7 @@ function App() {
     // <!-- beforeEnd -->
     // </ul>
     // <!-- afterEnd -->
-    $('#espresso-menu-list').insertAdjacentHTML(
-      'beforeEnd',
-      menuItemTemplate(espressoMenuName)
-    );
+    $('#espresso-menu-list').innerHTML = template;
 
     // querySelector은 ul안에 첫번째 li 요소만 리턴함.
     updatedMenuCount();
